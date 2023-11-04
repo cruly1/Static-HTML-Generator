@@ -4,6 +4,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+metódusok:
+- konstruktor
+- sourceCode
+- generateHtmlFile
+- cleanString
+- getAbsolutePath
+- getExtension
+- dirName
+- getCurrentDirImages
+- fileLinker
+ */
+
 public class ImageGenerator {
     private String path;
     private List<String> images;

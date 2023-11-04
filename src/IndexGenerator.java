@@ -2,6 +2,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+/*
+metódusok:
+- konstruktor
+- generateIndex
+- listEveryFileAndDirectory
+- generateHtmlFile
+- cleanDir
+- cleanPath
+- cleanFileName
+ */
+
 public class IndexGenerator {
     private String path;
     private List<String> images;
