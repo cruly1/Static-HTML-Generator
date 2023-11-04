@@ -57,7 +57,7 @@ public class Utils {
             }
         }
 
-        return new ArrayList<>(List.of(images, directories));
+        return List.of(images, directories);
     }
 
 
