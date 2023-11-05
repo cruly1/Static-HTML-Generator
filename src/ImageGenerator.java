@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,8 +28,8 @@ public class ImageGenerator {
     }
 
     public void sourceCode(String elem, String rootPath) {
-        String fileName = cleanString(elem);
-        String absolutePath = getAbsolutePath(elem);
+        String fileName = Utils.fileOrDirectoryName(elem);
+        String absolutePath = Utils.getAbsPath(elem);
         StringBuilder sb = new StringBuilder();
 
         sb.append(
@@ -44,7 +43,16 @@ public class ImageGenerator {
                     <title>Static HTML Generator - Project</title>
                 </head>
                 <body>""");
-        sb.append("<h1 style=\"border-bottom: 2px solid black;\"><a href=" + rootPath + "/index.html>Home Page</a></h1>");
+
+        StringBuilder sb2 = new StringBuilder();
+
+        int depth = Utils.getDepth(this.path, rootPath);
+        for (int i = 0; i < depth; i++) {
+            sb2.append("../");
+        }
+
+        sb.append("<h1 style=\"border-bottom: 2px solid black;\"><a href = \"%sindex.html\">Home Page</a></h1>\n<hr>\n\n".formatted(sb2.toString()));
+
         sb.append("<h2 style=\"border-bottom: 2px solid black;\">Directories:</h2>");
 
         for (String dir : directories) {
@@ -71,10 +79,10 @@ public class ImageGenerator {
         }
 
         if (!nextElem.equals("")) {
-            nextElem = cleanString(nextElem) + ".html";
+            nextElem = Utils.fileOrDirectoryName(nextElem) + ".html";
         }
         if (!prevElem.equals("")){
-            prevElem = cleanString(prevElem) + ".html";
+            prevElem = Utils.fileOrDirectoryName(prevElem) + ".html";
         }
 
         sb.append(fileLinker(fileName + "." + getExtension(elem), nextElem, prevElem));
@@ -97,27 +105,6 @@ public class ImageGenerator {
         } catch (IOException e) {
             System.err.println("Hiba történt a fájl létrehozása közben: " + e.getMessage());
         }
-    }
-
-    /*
-    eltávolítja az elem (vagyis az aktuális fénykép) végéről a kiterjesztést,
-    így csak a nevét kapja meg a metódus
-     */
-    private String cleanString(String s) {
-        File file = new File(s);
-        String fileName = file.getName();
-        int lastIndex = fileName.lastIndexOf('.');
-        if (lastIndex > 0) {
-            return fileName.substring(0, lastIndex);
-        }
-        return fileName;
-    }
-
-    /*
-    a könyvtár teljes elérését adja vissza
-     */
-    private String getAbsolutePath(String s) {
-        return s.substring(0, s.lastIndexOf("/"));
     }
 
     /*
@@ -144,7 +131,7 @@ public class ImageGenerator {
         List<String> result = new ArrayList<>();
 
         for (String image : images) {
-            if (getAbsolutePath(image).equals(getAbsolutePath(this.path))) {
+            if (Utils.getAbsPath(image).equals(Utils.getAbsPath(this.path))) {
                 result.add(image);
             }
         }

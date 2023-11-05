@@ -28,15 +28,6 @@ public class IndexGenerator {
     az elkészített html fájlt és a képeket, valamint a könyvtárakat fogja majd kilistázni
     ezen felül meghívja a html generáló metódust, mely elkészíti a könyvtárban az index.html fájlt
      */
-
-    /*
-    html source code:
-    - home page
-    - directories
-    - előre, hátra gomb
-    - kivételes gombok
-    - kattintásra tovább gomb
-     */
     public void generateIndex(String rootPath) {
         StringBuilder sb = new StringBuilder();
 
@@ -70,22 +61,33 @@ public class IndexGenerator {
     private String listEveryFileAndDirectory(String rootPath) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("<h1 style=\"border-bottom: 2px solid black;\"><a href=" + rootPath + "/index.html>Home Page</a></h1>");
+        StringBuilder sb2 = new StringBuilder();
+
+        int depth = Utils.getDepth(this.path, rootPath);
+        for (int i = 0; i < depth; i++) {
+            sb2.append("../");
+        }
+
+        sb.append("<h1 style=\"border-bottom: 2px solid black;\"><a href = \"%sindex.html\">Home Page</a></h1>\n<hr>\n\n".formatted(sb2.toString()));
 
         sb.append("<h2 style=\"border-bottom: 2px solid black;\">Directories:</h2>");
 
+        if (!(this.path.equals(rootPath))) {
+            sb.append("<h1\"><a href=../index.html>..</a></h1>");
+        }
+
         for (String dir : directories) {
             if (Utils.isSubFolder(dir, this.path)) {
-                sb.append("<h4><a href=\"" + dir + "/index.html" + "\">" + cleanDir(dir) + "</a></h4>");
+                sb.append("<h4><a href=\"" + cleanDir(dir) + "/index.html" + "\">" + cleanDir(dir) + "</a></h4>");
             }
         }
 
         sb.append("<h2 style=\"border-bottom: 2px solid black;\">Images:</h2>");
 
         for (String image : images) {
-            if (cleanPath(image).equals(this.path)) {
-                String fileLink = cleanPath(image) + "/" + cleanFileName(image) + ".html";
-                String fileName = cleanFileName(image);
+            if (Utils.getAbsPath(image).equals(this.path)) {
+                String fileLink = Utils.fileOrDirectoryName(image) + ".html";
+                String fileName = Utils.fileOrDirectoryName(image);
                 sb.append("<h4><a href=\"" + fileLink + "\">" + fileName + "</a></h4>");
             }
         }
@@ -111,20 +113,5 @@ public class IndexGenerator {
         String[] tmp = s.split("/");
 
         return tmp[tmp.length - 1];
-    }
-
-    /*
-    ez megadja a teljes elérését a könyvtárnak / fájlnak
-    */
-    private String cleanPath(String s) {
-        return s.substring(0, s.lastIndexOf("/"));
-    }
-
-    /*
-    ez megadja a file nevét kiterjesztés nélkül
-     */
-    private String cleanFileName(String s) {
-        String[] tmp = s.split("/");
-        return tmp[tmp.length - 1].substring(0, tmp[tmp.length - 1].lastIndexOf("."));
     }
 }

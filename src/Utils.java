@@ -11,25 +11,15 @@ public class Utils {
             System.exit(1);
         }
 
+        /*
+        TODO
+         - clear kapcsoló
+         */
+
         if (!new File(path[0]).isDirectory()) {
             System.err.println("Hiba! Hibás elérési útvonal!");
             System.exit(2);
         }
-    }
-
-    /*
-    eldönti egy fájlról, hogy elfogadott kiterjesztést használ e
-     */
-    public static boolean validImageExtensions(String file) {
-        String[] extensions = {"jpg", "jpeg", "png"};
-
-        for (int i = 0; i < extensions.length; i++) {
-            if (file.endsWith(extensions[i])) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /*
@@ -51,7 +41,9 @@ public class Utils {
                     List<List<String>> subLists = findImagesAndDirectories(file.getAbsolutePath());
                     images.addAll(subLists.get(0));
                     directories.addAll(subLists.get(1));
-                } else if (Utils.validImageExtensions(file.getName())) {
+                } else if (file.getName().endsWith("jpg")
+                        || file.getName().endsWith("png")
+                        || file.getName().endsWith("jpeg")) {
                     images.add(file.getAbsolutePath());
                 }
             }
@@ -60,12 +52,7 @@ public class Utils {
         return List.of(images, directories);
     }
 
-
-    /*
-    végigmegy az összes fájlon a gyökérkönyvtáron belül
-    minden almappán, azoknak a tartalmán és azok alapján példányosít
-     */
-    public static void varazsMetodus(List<List<String>> lista, String rootPath) {
+    public static void startGenerators(List<List<String>> lista, String rootPath) {
         for (String image : lista.get(0)) {
             new ImageGenerator(image, lista).sourceCode(image, rootPath);
         }
@@ -86,11 +73,33 @@ public class Utils {
     ezért hogyha az egyik pontosan 1 darab '/' jellel tartalmaz többet mint a másik,
     akkor biztosan almappája az egyik a másiknak
      */
-    public static boolean isSubFolder(String s, String currentDir) {
-        if (s.split("/").length == currentDir.split("/").length + 1) {
+    public static boolean isSubFolder(String subFolder, String currentDir) {
+        String[] sub = subFolder.split("/");
+        String[] curr = currentDir.split("/");
+
+        if (sub[sub.length-2].equals(curr[curr.length - 1])) {
             return true;
         }
 
         return false;
+    }
+
+    public static String fileOrDirectoryName(String s) {
+        String[] dirs = s.split("/");
+        String tmp = dirs[dirs.length - 1];
+
+        if (tmp.contains(".")) {
+            return tmp.substring(0, tmp.lastIndexOf("."));
+        }
+
+        return tmp;
+    }
+
+    public static int getDepth(String currentPath, String rootPath) {
+        return currentPath.split("/").length - rootPath.split("/").length - 1;
+    }
+
+    public static String getAbsPath(String s) {
+        return s.substring(0, s.lastIndexOf("/"));
     }
 }
