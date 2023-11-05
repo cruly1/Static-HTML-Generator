@@ -25,7 +25,6 @@ public class Utils {
         File root = new File(rootPath);
         File[] list = root.listFiles();
 
-
         if (list == null) return ;
 
         for (File f : list) {
@@ -41,7 +40,6 @@ public class Utils {
     public static List<List<String>> findImagesAndDirectories(String path) {
         List<String> images = new ArrayList<>();
         List<String> directories = new ArrayList<>();
-
         File dir = new File(path);
         File[] files = dir.listFiles();
 

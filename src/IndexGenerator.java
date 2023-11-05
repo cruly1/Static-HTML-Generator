@@ -26,9 +26,7 @@ public class IndexGenerator {
                     <title>Static HTML Generator - Project</title>
                 </head>
                 <body>""");
-
         sb.append(htmlBody(rootPath));
-
         sb.append("""
                 </body>
                 </html>
@@ -39,15 +37,11 @@ public class IndexGenerator {
 
     private String htmlBody(String rootPath) {
         StringBuilder sb = new StringBuilder();
-
         StringBuilder sb2 = new StringBuilder();
-
         int depth = Utils.getDepth(this.path, rootPath);
 
         sb2.append("../".repeat(depth));
-
         sb.append("<h1 style=\"border-bottom: 2px solid black;\"><a href = \"%sindex.html\">Home Page</a></h1>\n<hr>\n\n".formatted(sb2.toString()));
-
         sb.append("<h2 style=\"border-bottom: 2px solid black;\">Directories:</h2>");
 
         if (!(this.path.equals(rootPath))) {

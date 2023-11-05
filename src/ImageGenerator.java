@@ -19,7 +19,6 @@ public class ImageGenerator {
         StringBuilder sb = new StringBuilder();
 
         sb.append(Utils.htmlHead());
-
         sb.append(htmlBody(rootPath, fileName, elem));
 
         generateHtmlFile(sb.toString(), fileName, absolutePath);
@@ -28,13 +27,10 @@ public class ImageGenerator {
     public String htmlBody(String rootPath, String fileName, String elem) {
         StringBuilder sb = new StringBuilder();
         StringBuilder sbTmp = new StringBuilder();
-
         int depth = Utils.getDepth(this.path, rootPath);
 
         sbTmp.append("../".repeat(depth));
-
         sb.append("<h1 style=\"border-bottom: 2px solid black;\"><a href = \"%sindex.html\">Home Page</a></h1>\n<hr>\n\n".formatted(sbTmp.toString()));
-
         sb.append("<h2 style=\"border-bottom: 2px solid black;\">Directories:</h2>");
 
         if (depth != 0) {
@@ -51,7 +47,6 @@ public class ImageGenerator {
 
         List<String> currentDirImages = Utils.getCurrentDirImages(this.path, images);
         int currentIndex = currentDirImages.indexOf(this.path);
-
         String nextElem = "";
         String prevElem = "";
 
@@ -72,7 +67,6 @@ public class ImageGenerator {
         }
 
         sb.append(fileLinker(fileName + "." + getExtension(elem), nextElem, prevElem));
-
         sb.append("""
             </body>
             </html>
