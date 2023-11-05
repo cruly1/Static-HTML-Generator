@@ -2,12 +2,13 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-//        Utils.checkArguments(args);
-//        String rootPath = args[0];
+        Utils.checkArguments(args);
+        String rootPath = args[0];
 
-        String rootPath = "/Users/komphone/prog/prog2/images";
-        List<List<String>> varazsLista = Utils.findImagesAndDirectories(rootPath);
-        varazsLista.get(1).add(rootPath);
-        Utils.startGenerators(varazsLista, rootPath);
+        if (args.length == 2 && args[1].equals("-clean")) return;
+
+        List<List<String>> listAllElements = Utils.findImagesAndDirectories(rootPath);
+        listAllElements.get(1).add(rootPath);
+        Utils.startGenerators(listAllElements, rootPath);
     }
 }

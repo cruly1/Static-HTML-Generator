@@ -2,17 +2,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-/*
-metódusok:
-- konstruktor
-- generateIndex
-- listEveryFileAndDirectory
-- generateHtmlFile
-- cleanDir
-- cleanPath
-- cleanFileName
- */
-
 public class IndexGenerator {
     private String path;
     private List<String> images;
@@ -24,10 +13,6 @@ public class IndexGenerator {
         this.directories = lista.get(1);
     }
 
-    /*
-    az elkészített html fájlt és a képeket, valamint a könyvtárakat fogja majd kilistázni
-    ezen felül meghívja a html generáló metódust, mely elkészíti a könyvtárban az index.html fájlt
-     */
     public void generateIndex(String rootPath) {
         StringBuilder sb = new StringBuilder();
 
@@ -42,7 +27,7 @@ public class IndexGenerator {
                 </head>
                 <body>""");
 
-        sb.append(listEveryFileAndDirectory(rootPath));
+        sb.append(htmlBody(rootPath));
 
         sb.append("""
                 </body>
@@ -52,21 +37,14 @@ public class IndexGenerator {
         generateHtmlFile(sb.toString());
     }
 
-    /*
-    kilistázza az adott könyvtárban található összes fényképet
-    és összes könyvtárat
-    majd ez alapján fűzi StringBuilderbe a html forráskódokat
-    ezáltal ki lesz listázva minden szükséges fájl a könyvtárunkban
-     */
-    private String listEveryFileAndDirectory(String rootPath) {
+    private String htmlBody(String rootPath) {
         StringBuilder sb = new StringBuilder();
 
         StringBuilder sb2 = new StringBuilder();
 
         int depth = Utils.getDepth(this.path, rootPath);
-        for (int i = 0; i < depth; i++) {
-            sb2.append("../");
-        }
+
+        sb2.append("../".repeat(depth));
 
         sb.append("<h1 style=\"border-bottom: 2px solid black;\"><a href = \"%sindex.html\">Home Page</a></h1>\n<hr>\n\n".formatted(sb2.toString()));
 
@@ -78,7 +56,7 @@ public class IndexGenerator {
 
         for (String dir : directories) {
             if (Utils.isSubFolder(dir, this.path)) {
-                sb.append("<h4><a href=\"" + cleanDir(dir) + "/index.html" + "\">" + cleanDir(dir) + "</a></h4>");
+                sb.append("<h4><a href=\"" + Utils.fileOrDirectoryName(dir) + "/index.html" + "\">" + Utils.fileOrDirectoryName(dir) + "</a></h4>");
             }
         }
 
@@ -100,18 +78,7 @@ public class IndexGenerator {
             writer.write(sourceCode);
             System.out.println(this.path);
         } catch (IOException e) {
-            System.err.println("Hiba történt a fájl létrehozása közben: " + e.getMessage());
+            System.err.println("[ERROR]" + e.getMessage());
         }
-    }
-
-    /*
-    random fos metódusok amelyek kiszedték a fájl / könyvtár nevét,
-    kiterjesztését és még fasz tudja mire volt jó
-    currently működik szóval ne merészelj hozzányúlni, a jövőbeli éned ígyis anyázik neked
-     */
-    private String cleanDir(String s) {
-        String[] tmp = s.split("/");
-
-        return tmp[tmp.length - 1];
     }
 }

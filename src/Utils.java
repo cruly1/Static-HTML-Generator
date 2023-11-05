@@ -6,27 +6,38 @@ public class Utils {
     private Utils() {}
 
     public static void checkArguments(String[] path) {
-        if (path.length != 1) {
-            System.err.println("Hiba! Adja meg az elérési útvonalat!");
+        if (path.length != 1 && path.length !=2) {
+            System.err.println("[ERROR] Please provide a directory!");
             System.exit(1);
         }
 
-        /*
-        TODO
-         - clear kapcsoló
-         */
+        if (path.length == 2 && path[1].equals("-clean")) {
+            cleaner(path[0]);
+        }
 
         if (!new File(path[0]).isDirectory()) {
-            System.err.println("Hiba! Hibás elérési útvonal!");
+            System.err.println("[ERROR] Wrong or unreachable directory!");
             System.exit(2);
         }
     }
 
-    /*
-    bejárja a metódus az egész mappaszerkezetet és egy listába menti a képeket,
-    egy külön listába menti a könyvtárakat elérési úttal együtt
-    majd ezt téríti vissza
-     */
+    private static void cleaner(String rootPath) {
+        File root = new File(rootPath);
+        File[] list = root.listFiles();
+
+
+        if (list == null) return ;
+
+        for (File f : list) {
+            if (f.isDirectory()) {
+                cleaner(f.getAbsolutePath());
+            }
+            else if (f.toString().endsWith(".html")){
+                f.delete();
+            }
+        }
+    }
+
     public static List<List<String>> findImagesAndDirectories(String path) {
         List<String> images = new ArrayList<>();
         List<String> directories = new ArrayList<>();
@@ -62,26 +73,11 @@ public class Utils {
         }
     }
 
-    /*
-    2023. 11. 02.
-    21:29
-    MIT TETTEM?
-
-    majd holnapra elromlik
-    a lényegi működése ugye, hogy ha megadunk egy elérési útvonalat, az tartalmazni fog '/' jeleket
-    és mivel minden elérés után töröltem a '/' karaktereket, de az összes előtt meghagytam
-    ezért hogyha az egyik pontosan 1 darab '/' jellel tartalmaz többet mint a másik,
-    akkor biztosan almappája az egyik a másiknak
-     */
     public static boolean isSubFolder(String subFolder, String currentDir) {
         String[] sub = subFolder.split("/");
         String[] curr = currentDir.split("/");
 
-        if (sub[sub.length-2].equals(curr[curr.length - 1])) {
-            return true;
-        }
-
-        return false;
+        return sub[sub.length - 2].equals(curr[curr.length - 1]);
     }
 
     public static String fileOrDirectoryName(String s) {
@@ -96,10 +92,42 @@ public class Utils {
     }
 
     public static int getDepth(String currentPath, String rootPath) {
-        return currentPath.split("/").length - rootPath.split("/").length - 1;
+        if (currentPath.contains(".")) {
+            return currentPath.split("/").length - rootPath.split("/").length - 1;
+        }
+        return currentPath.split("/").length - rootPath.split("/").length;
     }
 
     public static String getAbsPath(String s) {
         return s.substring(0, s.lastIndexOf("/"));
+    }
+
+    public static List<String> getCurrentDirImages(String currentPath, List<String> images) {
+        List<String> result = new ArrayList<>();
+
+        for (String image : images) {
+            if (Utils.getAbsPath(image).equals(Utils.getAbsPath(currentPath))) {
+                result.add(image);
+            }
+        }
+
+        return result;
+    }
+
+    public static String htmlHead() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("""
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Static HTML Generator - Project</title>
+                </head>
+                <body>""");
+
+        return sb.toString();
     }
 }
