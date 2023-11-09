@@ -114,8 +114,34 @@ public class Utils {
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>Static HTML Generator - Project</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 20px;
+                            padding: 20px;
+                        }
+                                
+                        h1, h2 {
+                            border-bottom: 2px solid black;
+                            padding-bottom: 5px;
+                        }
+                                
+                        h1 a {
+                            text-decoration: none;
+                            color: black;
+                        }
+                                
+                        h2, h4 {
+                            margin-top: 20px;
+                        }
+                                
+                        h4 a {
+                            text-decoration: none;
+                            color: blue;
+                        }
+                    </style>
                 </head>
-                <body>""");
+                """);
 
         return sb.toString();
     }
