@@ -1,5 +1,5 @@
 ## static html generator
-#### java program generates html files
+#### java program generates html files for directories and images
 ##### *made for programming languages 2*
 
 ## usage
