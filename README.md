@@ -10,4 +10,4 @@
 javac Main.java
 java Main Users/user/Documents
 ```
-- for a second command line argument, you can give `-clean`
+- for a second command line argument, you can adjust `-clean`. This will delete all HTML files in your folder and subfolders.
