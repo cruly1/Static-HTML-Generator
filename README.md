@@ -4,7 +4,7 @@
 
 ## usage
 - clone the repository
-- as command line argument you have to give the program a path in your harddrive, *for example:*
+- you have to adjust an absolutepath for command line argument, which exists your harddrive, *for example:*
  ```
 Users/user/Documents
 ```
