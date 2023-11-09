@@ -6,8 +6,8 @@
 ## Usage
 - clone the repository
 - as command line argument you have to give the program a path in your harddrive, *for example:*
- ```java
+ ```
 javac Main.java
 java Main Users/user/Documents
 ```
-- for a second commnad line argument, you can give `-clean`
+- for a second command line argument, you can give `-clean`
