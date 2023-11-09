@@ -1,9 +1,8 @@
-# Static-HTML-Generator
-### The program will generate HTML files for directories and images
-### You can switch between the images and walk through your subfolders as well
-#### *This Project was made for Programming Languages 2.*
+# static html generator
+### java program generates html files
+#### *made for programming languages 2*
 
-## Usage
+## usage
 - clone the repository
 - as command line argument you have to give the program a path in your harddrive, *for example:*
  ```
