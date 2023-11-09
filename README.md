@@ -6,5 +6,5 @@
 ## Usage
 - clone the repository
 - as command line argument you have to give the program a path in your harddrive, *for example:*
-`javac Main.java`
-`java Main C:\Users\user\Documents`
+# `javac Main.java`
+# `java Main C:\Users\user\Documents`
