@@ -1,6 +1,6 @@
-# static html generator
-### java program generates html files
-#### *made for programming languages 2*
+## static html generator
+#### java program generates html files
+##### *made for programming languages 2*
 
 ## usage
 - clone the repository
