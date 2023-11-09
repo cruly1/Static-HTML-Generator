@@ -13,6 +13,8 @@ public class Utils {
 
         if (path.length == 2 && path[1].equals("-clean")) {
             cleaner(path[0]);
+            System.out.println("All HTML file deleted successfully!");
+            System.exit(0);
         }
 
         if (!new File(path[0]).isDirectory()) {
@@ -37,7 +39,7 @@ public class Utils {
         }
     }
 
-    public static List<List<String>> findImagesAndDirectories(String path) {
+    public static List<List<String>> getImagesAndDirectories(String path) {
         List<String> images = new ArrayList<>();
         List<String> directories = new ArrayList<>();
         File dir = new File(path);
@@ -47,7 +49,7 @@ public class Utils {
             for (File file : files) {
                 if (file.isDirectory()) {
                     directories.add(file.getAbsolutePath());
-                    List<List<String>> subLists = findImagesAndDirectories(file.getAbsolutePath());
+                    List<List<String>> subLists = getImagesAndDirectories(file.getAbsolutePath());
                     images.addAll(subLists.get(0));
                     directories.addAll(subLists.get(1));
                 } else if (file.getName().endsWith("jpg")
@@ -63,11 +65,11 @@ public class Utils {
 
     public static void startGenerators(List<List<String>> lista, String rootPath) {
         for (String image : lista.get(0)) {
-            new ImageGenerator(image, lista).sourceCode(image, rootPath);
+            new ImageGenerator(image).generateImage(image, rootPath, lista);
         }
 
         for (String dir : lista.get(1)) {
-            new IndexGenerator(dir, lista).generateIndex(rootPath);
+            new IndexGenerator(dir).generateIndex(rootPath, lista);
         }
     }
 
@@ -76,17 +78,6 @@ public class Utils {
         String[] curr = currentDir.split("/");
 
         return sub[sub.length - 2].equals(curr[curr.length - 1]);
-    }
-
-    public static String fileOrDirectoryName(String s) {
-        String[] dirs = s.split("/");
-        String tmp = dirs[dirs.length - 1];
-
-        if (tmp.contains(".")) {
-            return tmp.substring(0, tmp.lastIndexOf("."));
-        }
-
-        return tmp;
     }
 
     public static int getDepth(String currentPath, String rootPath) {

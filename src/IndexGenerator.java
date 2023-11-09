@@ -1,23 +1,20 @@
-import java.io.FileWriter;
+import java.io.File;
+import java.io.PrintWriter;
 import java.io.IOException;
 import java.util.List;
 
 public class IndexGenerator {
     private String path;
-    private List<String> images;
-    private List<String> directories;
 
-    public IndexGenerator(String path, List<List<String>> lista) {
+    public IndexGenerator(String path) {
         this.path = path;
-        this.images = lista.get(0);
-        this.directories = lista.get(1);
     }
 
-    public void generateIndex(String rootPath) {
+    public void generateIndex(String rootPath, List<List<String>> lista) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(Utils.htmlHead());
-        sb.append(htmlBody(rootPath));
+        sb.append(htmlBody(rootPath, lista.get(0), lista.get(1)));
         sb.append("""
                 </body>
                 </html>
@@ -26,7 +23,7 @@ public class IndexGenerator {
         generateHtmlFile(sb.toString());
     }
 
-    private String htmlBody(String rootPath) {
+    private String htmlBody(String rootPath, List<String> images, List<String> directories) {
         StringBuilder sb = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
         int depth = Utils.getDepth(this.path, rootPath);
@@ -41,7 +38,8 @@ public class IndexGenerator {
 
         for (String dir : directories) {
             if (Utils.isSubFolder(dir, this.path)) {
-                sb.append("<h4><a href=\"" + Utils.fileOrDirectoryName(dir) + "/index.html" + "\">" + Utils.fileOrDirectoryName(dir) + "</a></h4>");
+                File f = new File(dir);
+                sb.append("<h4><a href=\"" + f.getName() + "/index.html" + "\">" + f.getName() + "</a></h4>");
             }
         }
 
@@ -49,8 +47,9 @@ public class IndexGenerator {
 
         for (String image : images) {
             if (Utils.getAbsPath(image).equals(this.path)) {
-                String fileLink = Utils.fileOrDirectoryName(image) + ".html";
-                String fileName = Utils.fileOrDirectoryName(image);
+                File f = new File(image);
+                String fileLink = f.getName().substring(0, f.getName().lastIndexOf(".")) + ".html";
+                String fileName = f.getName().substring(0, f.getName().lastIndexOf("."));
                 sb.append("<h4><a href=\"" + fileLink + "\">" + fileName + "</a></h4>");
             }
         }
@@ -59,11 +58,14 @@ public class IndexGenerator {
     }
 
     private void generateHtmlFile(String sourceCode) {
-        try (FileWriter writer = new FileWriter(this.path + "/index.html")) {
+        try (PrintWriter writer = new PrintWriter(this.path + "/index.html")) {
             writer.write(sourceCode);
             System.out.println(this.path);
+            writer.close();
         } catch (IOException e) {
-            System.err.println("[ERROR]" + e.getMessage());
+            System.err.println("[ERROR]" + e);
+        } catch (Exception e) {
+            System.err.println("[ERROR]" + e);
         }
     }
 }

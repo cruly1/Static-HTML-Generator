@@ -1,30 +1,28 @@
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class ImageGenerator {
     private String path;
-    private List<String> images;
-    private List<String> directories;
 
-    public ImageGenerator(String path, List<List<String>> lista) {
+    public ImageGenerator(String path) {
         this.path = path;
-        this.images = lista.get(0);
-        this.directories = lista.get(1);
     }
 
-    public void sourceCode(String elem, String rootPath) {
-        String fileName = Utils.fileOrDirectoryName(elem);
+    public void generateImage(String elem, String rootPath, List<List<String>> lista) {
+        File f = new File(elem);
+        String fileName = f.getName().substring(0, f.getName().lastIndexOf("."));
         String absolutePath = Utils.getAbsPath(elem);
         StringBuilder sb = new StringBuilder();
 
         sb.append(Utils.htmlHead());
-        sb.append(htmlBody(rootPath, fileName, elem));
+        sb.append(htmlBody(rootPath, fileName, elem, lista.get(0), lista.get(1)));
 
         generateHtmlFile(sb.toString(), fileName, absolutePath);
     }
 
-    public String htmlBody(String rootPath, String fileName, String elem) {
+    public String htmlBody(String rootPath, String fileName, String elem, List<String> images, List<String> directories) {
         StringBuilder sb = new StringBuilder();
         StringBuilder sbTmp = new StringBuilder();
         int depth = Utils.getDepth(this.path, rootPath);
@@ -38,8 +36,9 @@ public class ImageGenerator {
         }
 
         for (String dir : directories) {
+            File f = new File(dir);
             if (Utils.isSubFolder(dir, Utils.getAbsPath(this.path))) {
-                sb.append("<h4><a href=\"" + Utils.fileOrDirectoryName(dir) + "/index.html" + "\">" + Utils.fileOrDirectoryName(dir) + "</a></h4>");
+                sb.append("<h4><a href=\"" + f.getName() + "/index.html" + "\">" + f.getName() + "</a></h4>");
             }
         }
 
@@ -60,10 +59,12 @@ public class ImageGenerator {
         }
 
         if (!nextElem.equals("")) {
-            nextElem = Utils.fileOrDirectoryName(nextElem) + ".html";
+            File f1 = new File(nextElem);
+            nextElem = f1.getName().substring(0, f1.getName().lastIndexOf(".")) + ".html";
         }
         if (!prevElem.equals("")){
-            prevElem = Utils.fileOrDirectoryName(prevElem) + ".html";
+            File f2 = new File(prevElem);
+            prevElem = f2.getName().substring(0, f2.getName().lastIndexOf(".")) + ".html";
         }
 
         sb.append(fileLinker(fileName + "." + getExtension(elem), nextElem, prevElem));
@@ -76,11 +77,14 @@ public class ImageGenerator {
     }
 
     private void generateHtmlFile(String sourceCode, String elem, String absolutePath) {
-        try (FileWriter writer = new FileWriter(absolutePath + "/" + elem + ".html")) {
+        try (PrintWriter writer = new PrintWriter(absolutePath + "/" + elem + ".html")) {
             writer.write(sourceCode);
             System.out.println(this.path);
+            writer.close();
         } catch (IOException e) {
-            System.err.println("[ERROR]" + e.getMessage());
+            System.err.println("[ERROR]" + e);
+        } catch (Exception e) {
+            System.err.println("[ERROR]" + e);
         }
     }
 
