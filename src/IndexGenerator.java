@@ -1,6 +1,6 @@
 import java.io.File;
-import java.io.PrintWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class IndexGenerator {
@@ -33,7 +33,7 @@ public class IndexGenerator {
         sb.append("<h2 style=\"border-bottom: 2px solid black;\">Directories:</h2>");
 
         if (!(this.path.equals(rootPath))) {
-            sb.append("<h1\"><a href=../index.html>..</a></h1>");
+            sb.append("<h1\"><a href=../index.html>^^</a></h1>");
         }
 
         for (String dir : directories) {
@@ -46,7 +46,7 @@ public class IndexGenerator {
         sb.append("<h2 style=\"border-bottom: 2px solid black;\">Images:</h2>");
 
         for (String image : images) {
-            if (Utils.getAbsPath(image).equals(this.path)) {
+            if (Utils.getParentPath(image).equals(this.path)) {
                 File f = new File(image);
                 String fileLink = f.getName().substring(0, f.getName().lastIndexOf(".")) + ".html";
                 String fileName = f.getName().substring(0, f.getName().lastIndexOf("."));

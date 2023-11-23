@@ -77,6 +77,9 @@ public class Utils {
         String[] sub = subFolder.split("/");
         String[] curr = currentDir.split("/");
 
+        if (sub.length == curr.length) {
+            return false;
+        }
         return sub[sub.length - 2].equals(curr[curr.length - 1]);
     }
 
@@ -87,7 +90,7 @@ public class Utils {
         return currentPath.split("/").length - rootPath.split("/").length;
     }
 
-    public static String getAbsPath(String s) {
+    public static String getParentPath(String s) {
         return s.substring(0, s.lastIndexOf("/"));
     }
 
@@ -95,7 +98,7 @@ public class Utils {
         List<String> result = new ArrayList<>();
 
         for (String image : images) {
-            if (Utils.getAbsPath(image).equals(Utils.getAbsPath(currentPath))) {
+            if (Utils.getParentPath(image).equals(Utils.getParentPath(currentPath))) {
                 result.add(image);
             }
         }

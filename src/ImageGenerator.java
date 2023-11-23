@@ -13,7 +13,7 @@ public class ImageGenerator {
     public void generateImage(String elem, String rootPath, List<List<String>> lista) {
         File f = new File(elem);
         String fileName = f.getName().substring(0, f.getName().lastIndexOf("."));
-        String absolutePath = Utils.getAbsPath(elem);
+        String absolutePath = Utils.getParentPath(elem);
         StringBuilder sb = new StringBuilder();
 
         sb.append(Utils.htmlHead());
@@ -37,7 +37,7 @@ public class ImageGenerator {
 
         for (String dir : directories) {
             File f = new File(dir);
-            if (Utils.isSubFolder(dir, Utils.getAbsPath(this.path))) {
+            if (Utils.isSubFolder(dir, Utils.getParentPath(this.path))) {
                 sb.append("<h4><a href=\"" + f.getName() + "/index.html" + "\">" + f.getName() + "</a></h4>");
             }
         }
@@ -97,16 +97,18 @@ public class ImageGenerator {
     private String fileLinker(String s, String next, String previous) {
         StringBuilder sb = new StringBuilder();
 
+        sb.append("<div>");
         if (!next.equals("") && !previous.equals("")) {
-            sb.append("<h3><a href=\"./" + previous + "\"> << </a> &nbsp; <a href=\"./" + next + "\"> >> </a></h3>");
+            sb.append("<h3><a href=\"./" + previous + "\"> << </a>" + s + "&nbsp; <a href=\"./" + next + "\"> >> </a></h3>");
             sb.append("<a href=\"./" + next + "\"><img src=\"./"+ s + "\"  style=\"width: 20%; height: 20%;\"></a>");
         } else if (previous.equals("")) {
-            sb.append("<h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href=\"./" + next + "\"> >> </a></h3>");
+            sb.append("<h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + s + " <a href=\"./" + next + "\"> >> </a></h3>");
             sb.append("<a href=\"./" + next + "\"><img src=\"./"+ s + "\"  style=\"width: 20%; height: 20%;\"></a>");
         } else if (next.equals("")) {
-            sb.append("<h3> <a href=\"./" + previous + "\"> << </a></h3>");
+            sb.append("<h3> <a href=\"./" + previous + "\"> << </a> " + s + "</h3>");
             sb.append("<img src=\"./"+ s + "\"  style=\"width: 20%; height: 20%;\"></a>");
         }
+        sb.append("</div>");
 
         return sb.toString();
     }
