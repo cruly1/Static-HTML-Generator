@@ -1,6 +1,8 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Utils {
     private Utils() {}
@@ -13,7 +15,7 @@ public class Utils {
 
         if (path.length == 2 && path[1].equals("-clean")) {
             cleaner(path[0]);
-            System.out.println("All HTML file deleted successfully!");
+            System.out.println("All HTML files deleted successfully!");
             System.exit(0);
         }
 
@@ -29,17 +31,17 @@ public class Utils {
 
         if (list == null) return ;
 
-        for (File f : list) {
-            if (f.isDirectory()) {
-                cleaner(f.getAbsolutePath());
+        for (File file : list) {
+            if (file.isDirectory()) {
+                cleaner(file.getAbsolutePath());
             }
-            else if (f.toString().endsWith(".html")){
-                f.delete();
+            else if (file.getName().endsWith(".html")){
+                file.delete();
             }
         }
     }
 
-    public static List<List<String>> getImagesAndDirectories(String path) {
+    public static List<List<String>> listEveryImageAndDirectory(String path) {
         List<String> images = new ArrayList<>();
         List<String> directories = new ArrayList<>();
         File dir = new File(path);
@@ -49,18 +51,28 @@ public class Utils {
             for (File file : files) {
                 if (file.isDirectory()) {
                     directories.add(file.getAbsolutePath());
-                    List<List<String>> subLists = getImagesAndDirectories(file.getAbsolutePath());
+                    List<List<String>> subLists = listEveryImageAndDirectory(file.getAbsolutePath());
                     images.addAll(subLists.get(0));
                     directories.addAll(subLists.get(1));
-                } else if (file.getName().endsWith("jpg")
-                        || file.getName().endsWith("png")
-                        || file.getName().endsWith("jpeg")) {
+                } else if (isSupportedFileExtension(file)) {
                     images.add(file.getAbsolutePath());
                 }
             }
         }
+        Collections.sort(images);
+        Collections.sort(directories);
 
         return List.of(images, directories);
+    }
+
+    public static String getExtension(String s) {
+        return s.substring(s.lastIndexOf(".") + 1);
+    }
+
+    public static boolean isSupportedFileExtension(File file) {
+        List<String> supportedExtensions = new ArrayList<>(List.of("jpg", "jpeg", "png", "gif"));
+        boolean isSupported = supportedExtensions.contains(getExtension(file.getName()));
+        return isSupported ? true : false;
     }
 
     public static void startGenerators(List<List<String>> lista, String rootPath) {
@@ -73,14 +85,13 @@ public class Utils {
         }
     }
 
-    public static boolean isSubFolder(String subFolder, String currentDir) {
-        String[] sub = subFolder.split("/");
-        String[] curr = currentDir.split("/");
+    public static boolean isSubFolder(String subDir, String parentDir) {
+        boolean isSub = parentDir.endsWith(getParentPath(subDir));
+        return isSub ? true : false;
+    }
 
-        if (sub.length == curr.length) {
-            return false;
-        }
-        return sub[sub.length - 2].equals(curr[curr.length - 1]);
+    public static String getParentPath(String s) {
+        return s.substring(0, s.lastIndexOf("/"));
     }
 
     public static int getDepth(String currentPath, String rootPath) {
@@ -90,20 +101,10 @@ public class Utils {
         return currentPath.split("/").length - rootPath.split("/").length;
     }
 
-    public static String getParentPath(String s) {
-        return s.substring(0, s.lastIndexOf("/"));
-    }
-
     public static List<String> getCurrentDirImages(String currentPath, List<String> images) {
-        List<String> result = new ArrayList<>();
-
-        for (String image : images) {
-            if (Utils.getParentPath(image).equals(Utils.getParentPath(currentPath))) {
-                result.add(image);
-            }
-        }
-
-        return result;
+        return images.stream()
+                .filter(image -> Utils.getParentPath(image).equals(Utils.getParentPath(currentPath)))
+                .collect(Collectors.toList());
     }
 
     public static String htmlHead() {
@@ -117,32 +118,6 @@ public class Utils {
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>Static HTML Generator - Project</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            margin: 20px;
-                            padding: 20px;
-                        }
-                                
-                        h1, h2 {
-                            border-bottom: 2px solid black;
-                            padding-bottom: 5px;
-                        }
-                                
-                        h1 a {
-                            text-decoration: none;
-                            color: black;
-                        }
-                                
-                        h2, h4 {
-                            margin-top: 20px;
-                        }
-                                
-                        h4 a {
-                            text-decoration: none;
-                            color: blue;
-                        }
-                    </style>
                 </head>
                 """);
 

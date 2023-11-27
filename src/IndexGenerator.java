@@ -14,7 +14,7 @@ public class IndexGenerator {
         StringBuilder sb = new StringBuilder();
 
         sb.append(Utils.htmlHead());
-        sb.append(htmlBody(rootPath, lista.get(0), lista.get(1)));
+        sb.append(indexHtmlBody(rootPath, lista.get(0), lista.get(1)));
         sb.append("""
                 </body>
                 </html>
@@ -23,7 +23,7 @@ public class IndexGenerator {
         generateHtmlFile(sb.toString());
     }
 
-    private String htmlBody(String rootPath, List<String> images, List<String> directories) {
+    private String indexHtmlBody(String rootPath, List<String> images, List<String> directories) {
         StringBuilder sb = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
         int depth = Utils.getDepth(this.path, rootPath);
