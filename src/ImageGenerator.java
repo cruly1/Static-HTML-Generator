@@ -110,12 +110,3 @@ public class ImageGenerator {
         return sb.toString();
     }
 }
-
-/*
-
-next empty
-prev empty
-mind2 empty
-egyik sem empty
-
- */
