@@ -35,7 +35,7 @@ public class Utils {
         }
 
         if (root.endsWith("/")) {
-            root = root.substring(0, root.length());
+            root = root.substring(0, root.length() - 1);
         }
 
         return root;
@@ -88,7 +88,7 @@ public class Utils {
     public static boolean isSupportedFileExtension(File file) {
         List<String> supportedExtensions = new ArrayList<>(List.of("jpg", "jpeg", "png", "gif"));
         boolean isSupported = supportedExtensions.contains(getExtension(file.getName()));
-        return isSupported ? true : false;
+        return isSupported;
     }
 
     public static void startGenerators(List<List<String>> lista, String rootPath) {
@@ -103,7 +103,7 @@ public class Utils {
 
     public static boolean isSubFolder(String subDir, String parentDir) {
         boolean isSub = parentDir.endsWith(getParentPath(subDir));
-        return isSub ? true : false;
+        return isSub;
     }
 
     public static String getParentPath(String s) {
