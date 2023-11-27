@@ -12,7 +12,6 @@ public class ImageGenerator {
 
     public void generateImage(String elem, String rootPath, List<List<String>> lista) {
         File f = new File(elem);
-        System.out.println("# TESZT " + f.getAbsolutePath());
         String fileName = f.getName().substring(0, f.getName().lastIndexOf("."));
         String absolutePath = Utils.getParentPath(elem);
         StringBuilder sb = new StringBuilder();

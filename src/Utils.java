@@ -7,22 +7,38 @@ import java.util.stream.Collectors;
 public class Utils {
     private Utils() {}
 
-    public static void checkArguments(String[] path) {
+    public static String checkArguments(String[] path) {
+        String valid = formatRootPath(path[0]);
+
         if (path.length != 1 && path.length !=2) {
             System.err.println("[ERROR] Please provide a directory!");
             System.exit(1);
         }
 
         if (path.length == 2 && path[1].equals("-clean")) {
-            cleaner(path[0]);
+            cleaner(valid);
             System.out.println("All HTML files deleted successfully!");
             System.exit(0);
         }
 
-        if (!new File(path[0]).isDirectory()) {
+        if (!new File(valid).isDirectory()) {
             System.err.println("[ERROR] Wrong or unreachable directory!");
             System.exit(2);
         }
+
+        return valid;
+    }
+
+    public static String formatRootPath(String root) {
+        if (!root.startsWith("/")) {
+            root = "/" + root;
+        }
+
+        if (root.endsWith("/")) {
+            root = root.substring(0, root.length());
+        }
+
+        return root;
     }
 
     private static void cleaner(String rootPath) {
