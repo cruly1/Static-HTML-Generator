@@ -82,7 +82,7 @@ public class Utils {
     }
 
     public static String getExtension(String s) {
-        return s.substring(s.lastIndexOf(".") + 1);
+        return s.substring(s.lastIndexOf(".") + 1).toLowerCase();
     }
 
     public static boolean isSupportedFileExtension(File file) {
