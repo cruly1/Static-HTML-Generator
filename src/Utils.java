@@ -8,12 +8,12 @@ public class Utils {
     private Utils() {}
 
     public static String checkArguments(String[] path) {
-        String valid = formatRootPath(path[0]);
-
         if (path.length != 1 && path.length !=2) {
             System.err.println("[ERROR] Please provide a directory!");
             System.exit(1);
         }
+
+        String valid = formatRootPath(path[0]);
 
         if (path.length == 2 && path[1].equals("-clean")) {
             cleaner(valid);
