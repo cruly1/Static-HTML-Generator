@@ -15,15 +15,15 @@ public class Utils {
 
         String valid = formatRootPath(path[0]);
 
+        if (!new File(valid).isDirectory()) {
+            System.err.println("[ERROR] Wrong or unreachable directory!");
+            System.exit(2);
+        }
+
         if (path.length == 2 && path[1].equals("-clean")) {
             cleaner(valid);
             System.out.println("All HTML files deleted successfully!");
             System.exit(0);
-        }
-
-        if (!new File(valid).isDirectory()) {
-            System.err.println("[ERROR] Wrong or unreachable directory!");
-            System.exit(2);
         }
 
         return valid;
@@ -93,7 +93,7 @@ public class Utils {
 
     public static void startGenerators(List<List<String>> lista, String rootPath) {
         for (String image : lista.get(0)) {
-            new ImageGenerator(image).generateImage(image, rootPath, lista);
+            new ImageGenerator(image).generateImage(rootPath, lista);
         }
 
         for (String dir : lista.get(1)) {

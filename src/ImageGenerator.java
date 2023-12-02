@@ -10,14 +10,14 @@ public class ImageGenerator {
         this.path = path;
     }
 
-    public void generateImage(String elem, String rootPath, List<List<String>> lista) {
-        File f = new File(elem);
+    public void generateImage(String rootPath, List<List<String>> lista) {
+        File f = new File(this.path);
         String fileName = f.getName().substring(0, f.getName().lastIndexOf("."));
-        String absolutePath = Utils.getParentPath(elem);
+        String absolutePath = Utils.getParentPath(this.path);
         StringBuilder sb = new StringBuilder();
 
         sb.append(Utils.htmlHead());
-        sb.append(imageHtmlBody(rootPath, fileName, elem, lista.get(0), lista.get(1)));
+        sb.append(imageHtmlBody(rootPath, fileName, this.path, lista.get(0), lista.get(1)));
 
         generateHtmlFile(sb.toString(), fileName, absolutePath);
     }
